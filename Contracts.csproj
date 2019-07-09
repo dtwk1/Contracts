@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+ <Target Name="AfterBuild">
+  </Target>
+
+
+  <PropertyGroup>
+    <NugetDir>"C:\Program Files (x86)\NuGet\Visual Studio 2015\nuget.exe"</NugetDir>
+    <BuildDir>$(ProjectDir)$(ProjectName).csproj</BuildDir>
+    <PackagesDir>C:\Users\declan.taylor\OneDrive - ChartCo Ltd\Documents\Visual Studio 2015\Packages\</PackagesDir>
+    <PackageName>$(ProjectDir)$(ProjectName).*.nupkg</PackageName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+   </PropertyGroup>
+
+  <Target Name="Up" AfterTargets="AfterBuild">
+       <!-- <PropertyGroup>
+      <KTools>"$(ProjectDir)KTools.Version1up.ps1"</KTools>
+    </PropertyGroup>
+    <Exec Command="C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe ^&#xD;&#xA;-ExecutionPolicy ByPass ^&#xD;&#xA;-File $(KTools)" />-->   
+     <Message Importance="High" Text="========================================" />
+  </Target>
+
+
+    <!--  <ItemGroup>
+    <Files Include="one.txt"/>
+    <Files Include="two.txt"/>
+    <Files Include="three.txt"/>
+    <Files Include="four.txt"/>
+  </ItemGroup>
+
+<Target Name="Demo" AfterTargets="Up">
+    <Message  Importance="High" Text="Not batched: @(Files->'%(Identity)')"/>
+
+    <Message  Importance="High" Text="========================================"/>
+
+    <Message  Importance="High" Text="Batched: %(Files.Identity)"/>
+  </Target>-->
+
+  <Target Name="CopyPackage" AfterTargets="Up">
+    <PropertyGroup>
+      <CopyMessage>"Copying to package directory"</CopyMessage>
+    </PropertyGroup>
+    <ItemGroup>
+      <NugetPackages Include="$(ProjectDir)$(ProjectName)*nupkg" />
+     <NugetPackages2 Include="$(ProjectDir)bin\debug\*nupkg" /> 
+    </ItemGroup>
+    <!--<Exec Command="$(BaseDir) pack $(BuildDir)" />-->
+    <Message Importance="High" Text="$(CopyMessage)" />  
+    <Message Importance="High" Text="@(NugetPackages)" />
+       <Message Importance="High" Text="@(NugetPackages2)" />
+    <Copy SourceFiles="@(NugetPackages)" DestinationFolder="$(PackagesDir)" />
+      <Copy SourceFiles="@(NugetPackages2)" DestinationFolder="$(PackagesDir)" />
+  </Target>
+
+</Project>
